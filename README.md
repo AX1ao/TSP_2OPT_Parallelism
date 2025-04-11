@@ -26,8 +26,10 @@ The 2-opt algorithm is a local search heuristic that iteratively improves a rout
 | City & Distance Modeling | ✅ Done        |
 | Random City Generator    | ✅ Done        |
 | Sequential 2-opt         | ✅ Done        |
-| Benchmarking & Timing    | 🚧 In progress |
-| Parallel 2-opt           | 🚧 In progress |
+| Benchmarking & Timing    | ✅ Done        |
+| Parallel 2-opt           | ✅ Done        |
+| optimize parallel 2-opt  | 🚧 In progress |
+| Parallel other algorithms| 🚧 In progress |
 | Final Comparison & Report| ❌ Not started |
 
 ---
