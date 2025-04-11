@@ -61,13 +61,23 @@ fn main() {
 
     println!("Initial tour cost: {:.2}", compute_total_distance(&tour, &cities));
 
+    // SEQ VERSION
     let start = std::time::Instant::now();
     let (_, final_cost) = two_opt_seq(&tour, &cities);
     // if need to check tour detail, then use the line below:
     // let (optimized_tour, final_cost) = two_opt_seq(&tour, &cities);
     let duration = start.elapsed();
-
+    println!("Sequential Version:");
     println!("Final tour cost: {:.2}", final_cost);
     println!("Time taken: {:.2?}", duration);
+
+    // PAR VERSION
+    let start = std::time::Instant::now();
+    let (_, final_cost) = two_opt_par(&tour, &cities);
+    let duration = start.elapsed();
+    println!("Parallel Version:");
+    println!("Final tour cost: {:.2}", final_cost);
+    println!("Time taken: {:.2?}", duration);
+
     
 }

@@ -25,7 +25,7 @@ pub fn compute_total_distance(tour: &[usize], cities: &[City]) -> f64{
     total
 }
 
-fn euclidean_distance(a: &City, b: &City) -> f64{
+pub fn euclidean_distance(a: &City, b: &City) -> f64{
     ((a.x - b.x).powi(2) + (a.y - b.y).powi(2)).sqrt()
 }
 
