@@ -1,0 +1,8 @@
+version,k,delta_thresh,final_cost,time_ms
+sequential,,,5966.81,0.165
+topk++,2,1e-6,5849.93,44.79
+topk++,2,1e-5,5849.93,22.55
+topk++,3,1e-6,6013.61,18.59
+topk++,5,1e-6,13411.92,9.69
+topk++,10,1e-6,9084.72,15.44
+
