@@ -94,17 +94,6 @@ We implemented a parallel version of the 2-opt algorithm using **Rayon** in Rust
 
 ---
 
-## 🔜 Next Steps
-
-- Benchmark for `n = 200, 500, 1000` to see crossover point
-- Optimize further by batching multiple swaps per iteration (if non-overlapping)
-- Consider parallelizing other TSP algorithms like:
-  - Simulated Annealing
-  - Genetic Algorithms
-  - Ant Colony Optimization
-
----
-
 ## 🚀 Usage
 
 ### ⚙️ Run with default (50 cities)
