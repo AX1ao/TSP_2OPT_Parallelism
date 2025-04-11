@@ -1,20 +1,23 @@
-# TSP_2OPT_Parallelism
+# 🧠 TSP 2-Opt Parallelism in Rust
 
-This project implements and benchmarks the **2-opt algorithm** for solving the **Traveling Salesman Problem (TSP)** in Rust. The focus is on evaluating how well the algorithm performs in a sequential baseline, and then parallelizing it to improve speed and scalability.
+This project benchmarks and compares the performance of **sequential vs. parallel implementations** of the **2-opt algorithm** for solving the **Traveling Salesman Problem (TSP)** in Rust.
 
-## 🧠 Problem Summary
+The 2-opt algorithm is a local search heuristic that iteratively improves a route by reversing segments to reduce total travel distance. This project:
+- Implements a baseline sequential version in Rust
+- Prepares for future parallel implementation using concurrency primitives
+- Benchmarks tour cost and optimization time
 
-The Traveling Salesman Problem (TSP) asks:
-> "What is the shortest possible route that visits a list of cities exactly once and returns to the origin city?"
+---
 
-This problem is **NP-hard**, meaning no known algorithm can solve it optimally in polynomial time. Instead, we use a heuristic approach: **2-opt**, which iteratively improves the route by reversing segments to reduce total distance.
+## 🎯 Objectives
 
-## 🎯 Project Objectives
+- ✅ Implement a **sequential** 2-opt algorithm
+- ✅ Benchmark total cost reduction and runtime
+- 🔜 Implement a **parallel** version in `two_opt_par.rs`
+- 🔜 Compare time & cost vs. sequential baseline
+- 🔜 (Optional) Add CLI options and visual output
 
-- ✅ Implement a **sequential version** of 2-opt in Rust as a baseline
-- ✅ Benchmark performance on city sets of varying sizes (e.g. 10, 50, 100, 500)
-- 🚀 Implement a **parallel version** using Rust threads, `Rayon`, or other concurrency primitives
-- 📈 Compare results in terms of execution time, speedup, and final path quality
+---
 
 ## 📦 Current Project Status
 
@@ -27,7 +30,50 @@ This problem is **NP-hard**, meaning no known algorithm can solve it optimally i
 | Parallel 2-opt           | ❌ Not started |
 | Final Comparison & Report| ❌ Not started |
 
-## 🔧 Usage
+---
 
+## 🚀 Usage
+
+### ⚙️ Run with default (50 cities)
 ```bash
 cargo run --release
+```
+
+### ⚙️ Run with custom number of cities (e.g., 100)
+```bash
+cargo run --release -- 100
+```
+
+> The program will generate random cities, compute the initial and optimized tour cost, and print execution time.
+
+---
+
+## 🧪 Example Output
+
+```bash
+Generating 100 cities...
+Initial tour cost: 50292.04
+Final tour cost: 8683.73
+Time taken: 589.60µs
+```
+
+---
+
+## 🧱 Project Structure
+
+```
+src/
+├── main.rs             # CLI entry point
+├── tsp.rs              # Shared data structures and 2-opt sequential logic
+├── two_opt_par.rs      # (To be implemented) parallel version
+```
+
+---
+
+## 🛠 Dependencies
+
+```toml
+[dependencies]
+rand = "0.8"
+```
+
