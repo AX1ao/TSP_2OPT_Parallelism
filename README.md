@@ -57,8 +57,16 @@ We implemented a parallel version of the 2-opt algorithm using **Rayon** in Rust
 | 50     | Parallel    | 6451.21    | 51.93 ms   |
 | 100    | Sequential  | 8047.78    | 772 µs     |
 | 100    | Parallel    | 8315.54    | 145.75 ms  |
+| 200    | Sequential  | 11772.32   | 2.97 ms    |
+| 200    | Parallel    | 11782.87   | 481.04 ms  |
+| 500    | Sequential  | 18728.50   | 21.64 ms   |
+| 500    | Parallel    | 18081.89   | 3.68 s     |
+| 1000   | Sequential  | 25863.88   | 87.80 ms   |
+| 1000   | Parallel    | 29847.77   | 10.55 s    |
 
-> ⏱️ We observe that the **parallel version only pays off at larger scale**, but this implementation is now correct and extensible.
+> ⚠️ Parallelism is **not faster** for small to medium `n` due to thread overhead and full O(n²) re-evaluation each loop.  
+> ✅ Parallel sometimes finds a **slightly better local minimum** due to evaluating all swaps at once.  
+> ⚠️ At larger scales, current parallel design converges slowly and may even return worse results if iteration limit is hit.
 
 ---
 
