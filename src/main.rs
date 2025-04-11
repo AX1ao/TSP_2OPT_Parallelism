@@ -3,6 +3,8 @@ mod two_opt_seq;
 mod two_opt_par;
 
 use tsp::*;
+use two_opt_seq::*;
+use two_opt_par::*;
 
 fn main() {
     let num_cities = 50;
