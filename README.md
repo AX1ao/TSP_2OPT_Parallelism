@@ -100,7 +100,7 @@ All experiment results are now stored in CSV format in the `results/` folder.
 ```toml
 [dependencies]
 rand = "0.8"
-rayon = "1.5"
+rayon = "1.7"
 ```
 
 ---
