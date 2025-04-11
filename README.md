@@ -32,6 +32,45 @@ The 2-opt algorithm is a local search heuristic that iteratively improves a rout
 
 ---
 
+## 🧠 Parallel Implementation
+
+We implemented a parallel version of the 2-opt algorithm using **Rayon** in Rust.
+
+### ✅ Strategy:
+- Generate all `(i, j)` candidate city-pair swaps
+- Use `par_iter()` to evaluate improvement (`delta`) in parallel
+- Apply the **single best** improving swap per iteration
+- Repeat until no further meaningful improvement (`delta > 1e-6`) is found
+
+### ⚠️ Notes:
+- For small city counts (`n < 100`), parallelism is **slower** than sequential due to overhead
+- Floating point precision issues may cause endless swaps without a meaningful cost drop — we use a `delta > 1e-6` threshold to avoid this
+- A hard stop at 1000 iterations is added as a safety net
+
+### 📊 Example Results:
+
+| Cities | Version     | Final Cost | Time       |
+|--------|-------------|------------|------------|
+| 50     | Sequential  | 7115.20    | 130.53 µs  |
+| 50     | Parallel    | 6451.21    | 51.93 ms   |
+| 100    | Sequential  | 8047.78    | 772 µs     |
+| 100    | Parallel    | 8315.54    | 145.75 ms  |
+
+> ⏱️ We observe that the **parallel version only pays off at larger scale**, but this implementation is now correct and extensible.
+
+---
+
+## 🔜 Next Steps
+
+- Benchmark for `n = 200, 500, 1000` to see crossover point
+- Optimize further by batching multiple swaps per iteration (if non-overlapping)
+- Consider parallelizing other TSP algorithms like:
+  - Simulated Annealing
+  - Genetic Algorithms
+  - Ant Colony Optimization
+
+---
+
 ## 🚀 Usage
 
 ### ⚙️ Run with default (50 cities)
