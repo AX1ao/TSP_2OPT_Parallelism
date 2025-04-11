@@ -9,17 +9,7 @@ The 2-opt algorithm is a local search heuristic that iteratively improves a rout
 
 ---
 
-## 🎯 Objectives
-
-- ✅ Implement a **sequential** 2-opt algorithm
-- ✅ Benchmark total cost reduction and runtime
-- 🔜 Implement a **parallel** version in `two_opt_par.rs`
-- 🔜 Compare time & cost vs. sequential baseline
-- 🔜 (Optional) Add CLI options and visual output
-
----
-
-## 📦 Current Project Status
+## 🎯 Objectives / Current Project Status
 
 | Component                | Status        |
 |-------------------------|---------------|
