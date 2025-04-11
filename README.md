@@ -4,190 +4,94 @@ This project benchmarks and compares the performance of **sequential vs. paralle
 
 The 2-opt algorithm is a local search heuristic that iteratively improves a route by reversing segments to reduce total travel distance. This project:
 - Implements a baseline sequential version in Rust
-- Prepares for future parallel implementation using concurrency primitives
-- Benchmarks tour cost and optimization time
+- Explores multiple parallelization strategies using Rayon
+- Benchmarks tour cost and optimization time across various designs
+- Organizes results for reproducibility and analysis
 
 ---
 
 ## 🎯 Objectives / Current Project Status
 
-| Component                | Status        |
-|-------------------------|---------------|
+| Component                 | Status        |
+|--------------------------|---------------|
 | City & Distance Modeling | ✅ Done        |
 | Random City Generator    | ✅ Done        |
 | Sequential 2-opt         | ✅ Done        |
 | Benchmarking & Timing    | ✅ Done        |
-| Parallel 2-opt           | ✅ Done        |
-| optimize parallel 2-opt  | 🚧 In progress |
-| Parallel other algorithms| 🚧 In progress |
-| Final Comparison & Report| ❌ Not started |
+| Parallel 2-opt (Prototype) | ✅ Done      |
+| Top-k Batching           | ✅ Done        |
+| Top-k++ Thresholding     | ✅ Done        |
+| Results CSV Export       | ✅ Done        |
+| Hybrid Strategy (Next)   | 🧭 Planned     |
 
 ---
 
-## 🧠 Parallel Implementation
+## 🧠 Parallel Strategies Implemented
 
-We implemented a parallel version of the 2-opt algorithm using **Rayon** in Rust.
+### ✅ Prototype (Naive Parallel 2-Opt)
+- Parallel evaluation of all (i, j) swap candidates using `par_iter()`
+- Applies the single best swap per iteration
+- Repeats until no improving swaps remain (`delta > 1e-6`)
+- Includes an iteration safety limit
 
-### ✅ Strategy:
-- Generate all `(i, j)` candidate city-pair swaps
-- Use `par_iter()` to evaluate improvement (`delta`) in parallel
-- Apply the **single best** improving swap per iteration
-- Repeat until no further meaningful improvement (`delta > 1e-6`) is found
+### ✅ Top-K Batching
+- Evaluates all improving swaps, selects top-k by delta
+- Applies **non-overlapping** swaps from the top-k set
+- Reduces iteration count and improves convergence speed
 
-### ⚠️ Notes:
-- For small city counts (`n < 100`), parallelism is **slower** than sequential due to overhead
-- Floating point precision issues may cause endless swaps without a meaningful cost drop — we use a `delta > 1e-6` threshold to avoid this
-- A hard stop at 1000 iterations is added as a safety net
-
-### 📊 Prototype Results:
-
-| Cities | Version     | Final Cost | Time       |
-|--------|-------------|------------|------------|
-| 50     | Sequential  | 7115.20    | 130.53 µs  |
-| 50     | Parallel    | 6451.21    | 51.93 ms   |
-| 100    | Sequential  | 8047.78    | 772 µs     |
-| 100    | Parallel    | 8315.54    | 145.75 ms  |
-| 200    | Sequential  | 11772.32   | 2.97 ms    |
-| 200    | Parallel    | 11782.87   | 481.04 ms  |
-| 500    | Sequential  | 18728.50   | 21.64 ms   |
-| 500    | Parallel    | 18081.89   | 3.68 s     |
-| 1000   | Sequential  | 25863.88   | 87.80 ms   |
-| 1000   | Parallel    | 29847.77   | 10.55 s    |
-
-> ⚠️ Parallelism is **not faster** for small to medium `n` due to thread overhead and full O(n²) re-evaluation each loop.  
-> ✅ Parallel sometimes finds a **slightly better local minimum** due to evaluating all swaps at once.  
-> ⚠️ At larger scales, current parallel design converges slowly and may even return worse results if iteration limit is hit.
+### ✅ Top-K++ (With Delta Threshold)
+- Further filters swaps by minimum delta (`Δ > 1e-6`, `1e-5`, etc.)
+- Skips weak swaps to speed up evaluation
+- Adds tunable `k` and `delta_thresh` for better control
 
 ---
 
-### 📊 Top-k Batching Results
+## 📊 Key Takeaways from Benchmark Results
 
-| Cities | Version            | k  | Final Cost | Time       |
-|--------|--------------------|----|------------|------------|
-| 50     | Sequential         | –  | 5607.75    | 159.87 µs  |
-|        | Top-k Batching     | 2  | 9324.37    | 691.02 ms  |
-|        | Top-k Batching     | 3  | 6000.31    | 18.69 ms   |
-|        | Top-k Batching     | 5  | 6560.36    | 659.23 ms  |
-|        | Top-k Batching     | 10 | 5727.18    | 18.90 ms   |
-| 100    | Sequential         | –  | 8998.21    | 616.49 µs  |
-|        | Top-k Batching     | 2  | 8413.43    | 103.94 ms  |
-|        | Top-k Batching     | 3  | 8545.99    | 71.61 ms   |
-|        | Top-k Batching     | 5  | 8776.58    | 58.55 ms   |
-|        | Top-k Batching     | 10 | 28002.63   | 2.00 s     |
-| 500    | Sequential         | –  | 18680.54   | 24.53 ms   |
-|        | Top-k Batching     | 2  | 18194.39   | 2.59 s     |
-|        | Top-k Batching     | 3  | 18192.61   | 1.87 s     |
-|        | Top-k Batching     | 5  | 18531.14   | 1.28 s     |
-|        | Top-k Batching     | 10 | 18687.99   | 900.63 ms  |
-| 1000   | Sequential         | –  | 25831.19   | 87.51 ms   |
-|        | Top-k Batching     | 2  | 25547.59   | 12.43 s    |
-|        | Top-k Batching     | 3  | 25754.81   | 8.87 s     |
-|        | Top-k Batching     | 5  | 26130.96   | 13.21 s    |
-|        | Top-k Batching     | 10 | 27466.10   | 12.47 s    |
+### ✅ Sequential vs Parallel
+- Sequential 2-Opt is **extremely fast** for `n < 500`
+- Parallelism only starts to pay off beyond `n ≥ 1000`
+- Parallel versions may find **slightly better routes**, but are **much slower**
 
-> ✅ **Top-k batching** applies multiple non-overlapping swaps per iteration, reducing loop count and potentially improving solution quality.  
-> ✅ `k = 2 or 3` offers the best balance of **cost reduction** and **stability**, especially at `n ≥ 500`.  
-> 🔁 Higher `k` values like `k=10` can introduce **swap interference**, leading to worse final cost or infinite loops.  
-> ⚠️ At small `n`, high `k` may *accidentally work well* (as in `n = 50, k = 10`), but it's inconsistent.  
-> 🐢 **Runtime increases quickly** for large `n` due to full re-evaluation of O(n²) swaps in every loop, even with batching.  
-> 💡 Top-k is a **safe and tunable parallel upgrade** over the prototype version — good for experimentation and extension.
+### ✅ Top-K Batching
+- Small `k` (2–3) often gives the best trade-off between cost and runtime
+- Larger `k` can increase instability and runtime
+- Good middle-ground for enhancing parallel 2-opt
+
+### ✅ Top-K++ Optimization
+- Threshold filtering (`Δ > 1e-6`) was mostly neutral in impact — weak swaps are rare anyway
+- Best cost-performance balance often seen at `k = 3 or 10`
+- Runtime for `n = 1000` ranged from **4s to 13s**, depending on `k`
+- Sequential still dominates small instances, but TopK++ excels at **quality** in large `n`
+
+### ⚠️ Trade-offs
+- Every parallel version incurs **O(n²)** candidate generation and filtering
+- Gains in cost often come at the expense of **longer runtimes**
+- Combining 2-Opt with a **global search** strategy may yield better scalability
 
 ---
 
-### 📊 Top-k++ Results
+## 🧪 Example CLI Usage
 
-#### Cities = 50
-
-| Version            | k  | Δ Threshold | Final Cost | Time       |
-|--------------------|----|-------------|------------|------------|
-| Sequential         | –  | –           | 5966.81    | 164.76 µs  |
-| TopK++             | 2  | 1e-6 – 1e-4 | 5849.93    | 22–45 ms   |
-| TopK++             | 3  | 1e-6 – 1e-4 | 6013.61    | ~19–22 ms  |
-| TopK++             | 5  | 1e-6 – 1e-4 | 13411.92   | ~10 ms     |
-| TopK++             | 10 | 1e-6 – 1e-4 | 9084.72    | ~14 ms     |
-
-#### Cities = 100
-
-| Version            | k  | Δ Threshold | Final Cost | Time       |
-|--------------------|----|-------------|------------|------------|
-| Sequential         | –  | –           | 8689.75    | 652.18 µs  |
-| TopK++             | 2  | 1e-6 – 1e-4 | 8725.25    | ~89–99 ms  |
-| TopK++             | 3  | 1e-6 – 1e-4 | 8560.91    | ~64–68 ms  |
-| TopK++             | 5  | 1e-6 – 1e-4 | 34927.36   | ~20 ms     |
-| TopK++             | 10 | 1e-6 – 1e-4 | 24837.54   | ~37 ms     |
-
-#### Cities = 500
-
-| Version            | k  | Δ Threshold | Final Cost | Time       |
-|--------------------|----|-------------|------------|------------|
-| Sequential         | –  | –           | 18618.58   | 18.48 ms   |
-| TopK++             | 2  | 1e-6 – 1e-4 | 18211.98   | ~2.53 s    |
-| TopK++             | 3  | 1e-6 – 1e-4 | 18097.50   | ~1.76 s    |
-| TopK++             | 5  | 1e-6 – 1e-4 | 57398.27   | ~847 ms    |
-| TopK++             | 10 | 1e-6 – 1e-4 | 17833.87   | ~950 ms    |
-
-#### Cities = 1000
-
-| Version            | k  | Δ Threshold | Final Cost | Time       |
-|--------------------|----|-------------|------------|------------|
-| Sequential         | –  | –           | 25803.16   | 87.54 ms   |
-| TopK++             | 2  | 1e-6 – 1e-4 | 25426.70   | ~12.5 s    |
-| TopK++             | 3  | 1e-6 – 1e-4 | 25158.65   | ~8.7 s     |
-| TopK++             | 5  | 1e-6 – 1e-4 | 25434.48   | ~6.1 s     |
-| TopK++             | 10 | 1e-6 – 1e-4 | 24747.27   | ~4.0 s     |
-
----
-
-### 🧠 Summary
-
-- ✅ **TopK++ achieves lower costs than sequential**, especially at `n = 500` and `n = 1000`, where `k = 3–10` gives the best final result.
-- ✅ **Delta threshold (`Δ`) had no effect** on results across runs — suggesting only swaps with large improvements were ever considered.
-- ⚠️ **`k = 5` and `k = 10` underperform** for small `n` — they batch too aggressively and reduce convergence quality.
-- ⚠️ **TopK++ is slower than sequential** for small `n` due to the overhead of evaluating O(n²) candidates in parallel and filtering them smartly.
-- 🧠 **At large `n`, TopK++ shows potential**: it finds better routes than sequential, but runtime grows quickly.
-- 💡 **Future improvements could include**:
-  - Restricting candidate (i, j) windows
-  - Caching pairwise distances
-  - Better pruning of unproductive swap regions
-
----
-
-
-## 🚀 Usage
-
-### ⚙️ Run with default (50 cities)
 ```bash
+# Run with default (50 cities)
 cargo run --release
-```
 
-### ⚙️ Run with custom number of cities (e.g., 100)
-```bash
+# Run with 100 cities
 cargo run --release -- 100
 ```
 
-> The program will generate random cities, compute the initial and optimized tour cost, and print execution time.
+The program outputs:
+- Initial tour cost
+- Final optimized tour cost
+- Time taken for each strategy (sequential, parallel, etc.)
 
 ---
 
-## 🧪 Example Output
-
-```bash
-Generating 100 cities...
-Initial tour cost: 50292.04
-Final tour cost: 8683.73
-Time taken: 589.60µs
-```
-
----
-
-## 🧱 Project Structure
-
-```
-src/
-├── main.rs             # CLI entry point
-├── tsp.rs              # Shared data structures and 2-opt sequential logic
-├── two_opt_par.rs      # (To be implemented) parallel version
-```
+## 📂 Results
+All experiment results are now stored in CSV format in the `results/` folder.
+- Includes time (ms), cost, k, and threshold parameters
+- Easy to import into Excel, Python (pandas), etc.
 
 ---
 
@@ -196,5 +100,7 @@ src/
 ```toml
 [dependencies]
 rand = "0.8"
+rayon = "1.5"
 ```
 
+---
