@@ -39,7 +39,7 @@ We implemented a parallel version of the 2-opt algorithm using **Rayon** in Rust
 - Floating point precision issues may cause endless swaps without a meaningful cost drop — we use a `delta > 1e-6` threshold to avoid this
 - A hard stop at 1000 iterations is added as a safety net
 
-### 📊 Example Results:
+### 📊 Prototype Results:
 
 | Cities | Version     | Final Cost | Time       |
 |--------|-------------|------------|------------|
@@ -57,6 +57,40 @@ We implemented a parallel version of the 2-opt algorithm using **Rayon** in Rust
 > ⚠️ Parallelism is **not faster** for small to medium `n` due to thread overhead and full O(n²) re-evaluation each loop.  
 > ✅ Parallel sometimes finds a **slightly better local minimum** due to evaluating all swaps at once.  
 > ⚠️ At larger scales, current parallel design converges slowly and may even return worse results if iteration limit is hit.
+
+---
+
+### 📊 Top-k Batching Results
+
+| Cities | Version            | k  | Final Cost | Time       |
+|--------|--------------------|----|------------|------------|
+| 50     | Sequential         | –  | 5607.75    | 159.87 µs  |
+|        | Top-k Batching     | 2  | 9324.37    | 691.02 ms  |
+|        | Top-k Batching     | 3  | 6000.31    | 18.69 ms   |
+|        | Top-k Batching     | 5  | 6560.36    | 659.23 ms  |
+|        | Top-k Batching     | 10 | 5727.18    | 18.90 ms   |
+| 100    | Sequential         | –  | 8998.21    | 616.49 µs  |
+|        | Top-k Batching     | 2  | 8413.43    | 103.94 ms  |
+|        | Top-k Batching     | 3  | 8545.99    | 71.61 ms   |
+|        | Top-k Batching     | 5  | 8776.58    | 58.55 ms   |
+|        | Top-k Batching     | 10 | 28002.63   | 2.00 s     |
+| 500    | Sequential         | –  | 18680.54   | 24.53 ms   |
+|        | Top-k Batching     | 2  | 18194.39   | 2.59 s     |
+|        | Top-k Batching     | 3  | 18192.61   | 1.87 s     |
+|        | Top-k Batching     | 5  | 18531.14   | 1.28 s     |
+|        | Top-k Batching     | 10 | 18687.99   | 900.63 ms  |
+| 1000   | Sequential         | –  | 25831.19   | 87.51 ms   |
+|        | Top-k Batching     | 2  | 25547.59   | 12.43 s    |
+|        | Top-k Batching     | 3  | 25754.81   | 8.87 s     |
+|        | Top-k Batching     | 5  | 26130.96   | 13.21 s    |
+|        | Top-k Batching     | 10 | 27466.10   | 12.47 s    |
+
+> ✅ **Top-k batching** applies multiple non-overlapping swaps per iteration, reducing loop count and potentially improving solution quality.  
+> ✅ `k = 2 or 3` offers the best balance of **cost reduction** and **stability**, especially at `n ≥ 500`.  
+> 🔁 Higher `k` values like `k=10` can introduce **swap interference**, leading to worse final cost or infinite loops.  
+> ⚠️ At small `n`, high `k` may *accidentally work well* (as in `n = 50, k = 10`), but it's inconsistent.  
+> 🐢 **Runtime increases quickly** for large `n` due to full re-evaluation of O(n²) swaps in every loop, even with batching.  
+> 💡 Top-k is a **safe and tunable parallel upgrade** over the prototype version — good for experimentation and extension.
 
 ---
 
