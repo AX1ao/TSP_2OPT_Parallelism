@@ -86,25 +86,27 @@ fn main() {
     println!("Time taken: {:.2?}", duration);
 
     // Prototype Version
-    /* 
+    ///* 
     let start = std::time::Instant::now();
     let (_, final_cost) = par_prototype(&tour, &cities);
     let duration = start.elapsed();
     println!("Parallel Version:");
     println!("Final tour cost: {:.2}", final_cost);
     println!("Time taken: {:.2?}", duration);
-    */
+    //*/
 
     // Top K Batches Version
-    /*
-    let start = std::time::Instant::now();
-    let k = 5; // and 2, 3, 10, etc.
-    let (_, final_cost) = par_topk(&tour, &cities, k);
-    let duration = start.elapsed();
-    println!("Parallel Version k = 5:");
-    println!("Final tour cost: {:.2}", final_cost);
-    println!("Time taken: {:.2?}", duration);
-    */
+    ///*
+    let k_values = [2, 3, 5, 10];
+    for &k in &k_values {
+        let start = std::time::Instant::now();
+        let (_, final_cost) = par_topk(&tour, &cities, k);
+        let duration = start.elapsed();
+        println!("Parallel Top K Version k = {}:", k);
+        println!("Final tour cost: {:.2}", final_cost);
+        println!("Time taken: {:.2?}", duration);
+    }
+    //*/
 
     // Top K Plus VERSION
     let k_values = [2, 3, 5, 10];
@@ -115,7 +117,6 @@ fn main() {
             let start = std::time::Instant::now();
             let (_, final_cost) = par_topkplus::par_topkplus(&tour, &cities, k, delta_thresh);
             let duration = start.elapsed();
-
             println!("Parallel TopK++ | k = {}, delta_thresh = {:.0e}", k, delta_thresh);
             println!("Final tour cost: {:.2}", final_cost);
             println!("Time taken: {:.2?}\n", duration);
