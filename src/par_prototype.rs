@@ -12,7 +12,8 @@ use std::cmp::Ordering;
 //use std::time::Instant;
 use crate::tsp::{City, compute_total_distance, euclidean_distance};
 
-pub fn two_opt_par(tour: &[usize], cities: &[City]) -> (Vec<usize>, f64) {
+#[allow(dead_code)]
+pub fn par_prototype(tour: &[usize], cities: &[City]) -> (Vec<usize>, f64) {
     let mut improved = true;
     let mut new_tour = tour.to_vec();
     let mut loop_count = 0;

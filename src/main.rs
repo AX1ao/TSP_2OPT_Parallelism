@@ -1,10 +1,24 @@
 mod tsp;
 mod two_opt_par;
 mod two_opt_par_ver2;
+mod par;
+mod par_prototype;
+mod par_topk;
+mod par_topkplus;
+
 use tsp::*;
 #[allow(unused_imports)]
 use two_opt_par::*;
 use two_opt_par_ver2::*;
+use par::*;
+#[allow(unused_imports)]
+use par_prototype::*;
+#[allow(unused_imports)]
+use par_topk::*;
+#[allow(unused_imports)]
+use par_topkplus::*;
+
+
 use std::env;
 
 fn main() {
@@ -71,13 +85,42 @@ fn main() {
     println!("Final tour cost: {:.2}", final_cost);
     println!("Time taken: {:.2?}", duration);
 
-    // PAR VERSION
+    // Prototype Version
+    /* 
     let start = std::time::Instant::now();
-    let (_, final_cost) = two_opt_par(&tour, &cities);
+    let (_, final_cost) = par_prototype(&tour, &cities);
     let duration = start.elapsed();
     println!("Parallel Version:");
     println!("Final tour cost: {:.2}", final_cost);
     println!("Time taken: {:.2?}", duration);
+    */
+
+    // Top K Batches Version
+    /*
+    let start = std::time::Instant::now();
+    let k = 5; // and 2, 3, 10, etc.
+    let (_, final_cost) = par_topk(&tour, &cities, k);
+    let duration = start.elapsed();
+    println!("Parallel Version k = 5:");
+    println!("Final tour cost: {:.2}", final_cost);
+    println!("Time taken: {:.2?}", duration);
+    */
+
+    // Top K Plus VERSION
+    let k_values = [2, 3, 5, 10];
+    let delta_thresh_values = [1e-6, 1e-5, 1e-4];
+
+    for &k in &k_values {
+        for &delta_thresh in &delta_thresh_values {
+            let start = std::time::Instant::now();
+            let (_, final_cost) = par_topkplus::par_topkplus(&tour, &cities, k, delta_thresh);
+            let duration = start.elapsed();
+
+            println!("Parallel TopK++ | k = {}, delta_thresh = {:.0e}", k, delta_thresh);
+            println!("Final tour cost: {:.2}", final_cost);
+            println!("Time taken: {:.2?}\n", duration);
+        }
+    }
 
     let start = std::time::Instant::now();
     let (_, min_cost) = two_opt_par_ver2(&tour, &cities);
