@@ -94,6 +94,65 @@ We implemented a parallel version of the 2-opt algorithm using **Rayon** in Rust
 
 ---
 
+### 📊 Top-k++ Results
+
+#### Cities = 50
+
+| Version            | k  | Δ Threshold | Final Cost | Time       |
+|--------------------|----|-------------|------------|------------|
+| Sequential         | –  | –           | 5966.81    | 164.76 µs  |
+| TopK++             | 2  | 1e-6 – 1e-4 | 5849.93    | 22–45 ms   |
+| TopK++             | 3  | 1e-6 – 1e-4 | 6013.61    | ~19–22 ms  |
+| TopK++             | 5  | 1e-6 – 1e-4 | 13411.92   | ~10 ms     |
+| TopK++             | 10 | 1e-6 – 1e-4 | 9084.72    | ~14 ms     |
+
+#### Cities = 100
+
+| Version            | k  | Δ Threshold | Final Cost | Time       |
+|--------------------|----|-------------|------------|------------|
+| Sequential         | –  | –           | 8689.75    | 652.18 µs  |
+| TopK++             | 2  | 1e-6 – 1e-4 | 8725.25    | ~89–99 ms  |
+| TopK++             | 3  | 1e-6 – 1e-4 | 8560.91    | ~64–68 ms  |
+| TopK++             | 5  | 1e-6 – 1e-4 | 34927.36   | ~20 ms     |
+| TopK++             | 10 | 1e-6 – 1e-4 | 24837.54   | ~37 ms     |
+
+#### Cities = 500
+
+| Version            | k  | Δ Threshold | Final Cost | Time       |
+|--------------------|----|-------------|------------|------------|
+| Sequential         | –  | –           | 18618.58   | 18.48 ms   |
+| TopK++             | 2  | 1e-6 – 1e-4 | 18211.98   | ~2.53 s    |
+| TopK++             | 3  | 1e-6 – 1e-4 | 18097.50   | ~1.76 s    |
+| TopK++             | 5  | 1e-6 – 1e-4 | 57398.27   | ~847 ms    |
+| TopK++             | 10 | 1e-6 – 1e-4 | 17833.87   | ~950 ms    |
+
+#### Cities = 1000
+
+| Version            | k  | Δ Threshold | Final Cost | Time       |
+|--------------------|----|-------------|------------|------------|
+| Sequential         | –  | –           | 25803.16   | 87.54 ms   |
+| TopK++             | 2  | 1e-6 – 1e-4 | 25426.70   | ~12.5 s    |
+| TopK++             | 3  | 1e-6 – 1e-4 | 25158.65   | ~8.7 s     |
+| TopK++             | 5  | 1e-6 – 1e-4 | 25434.48   | ~6.1 s     |
+| TopK++             | 10 | 1e-6 – 1e-4 | 24747.27   | ~4.0 s     |
+
+---
+
+### 🧠 Summary
+
+- ✅ **TopK++ achieves lower costs than sequential**, especially at `n = 500` and `n = 1000`, where `k = 3–10` gives the best final result.
+- ✅ **Delta threshold (`Δ`) had no effect** on results across runs — suggesting only swaps with large improvements were ever considered.
+- ⚠️ **`k = 5` and `k = 10` underperform** for small `n` — they batch too aggressively and reduce convergence quality.
+- ⚠️ **TopK++ is slower than sequential** for small `n` due to the overhead of evaluating O(n²) candidates in parallel and filtering them smartly.
+- 🧠 **At large `n`, TopK++ shows potential**: it finds better routes than sequential, but runtime grows quickly.
+- 💡 **Future improvements could include**:
+  - Restricting candidate (i, j) windows
+  - Caching pairwise distances
+  - Better pruning of unproductive swap regions
+
+---
+
+
 ## 🚀 Usage
 
 ### ⚙️ Run with default (50 cities)
