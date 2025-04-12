@@ -1,4 +1,6 @@
 mod tsp;
+mod two_opt_par_ver2;
+
 mod par;
 mod par_prototype;
 mod par_topk;
@@ -6,6 +8,7 @@ mod par_topkplus;
 
 use tsp::*;
 #[allow(unused_imports)]
+use two_opt_par_ver2::*;
 use par::*;
 #[allow(unused_imports)]
 use par_prototype::*;
@@ -119,5 +122,10 @@ fn main() {
         }
     }
 
-
+    let start = std::time::Instant::now();
+    let (_, min_cost) = two_opt_par_ver2(&tour, &cities);
+    let duration = start.elapsed();
+    println!("Parallel Version2:");
+    println!("Total cost: {:.2}", min_cost);
+    println!("Total duration: {:.2?}", duration);
 }
