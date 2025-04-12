@@ -1,5 +1,8 @@
 mod tsp;
+<<<<<<< HEAD
 mod two_opt_par;
+=======
+>>>>>>> 1b42669 (Try to implement the 2-opt in a multithreads way, need to be optimized, passed the tests)
 mod two_opt_par_ver2;
 mod par;
 mod par_prototype;
@@ -8,7 +11,10 @@ mod par_topkplus;
 
 use tsp::*;
 #[allow(unused_imports)]
+<<<<<<< HEAD
 use two_opt_par::*;
+=======
+>>>>>>> 1b42669 (Try to implement the 2-opt in a multithreads way, need to be optimized, passed the tests)
 use two_opt_par_ver2::*;
 use par::*;
 #[allow(unused_imports)]
@@ -129,4 +135,8 @@ fn main() {
     println!("Parallel Version2:");
     println!("Total cost: {:.2}", min_cost);
     println!("Total duration: {:.2?}", duration);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1b42669 (Try to implement the 2-opt in a multithreads way, need to be optimized, passed the tests)
 }
