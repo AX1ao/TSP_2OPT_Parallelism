@@ -21,6 +21,7 @@ The 2-opt algorithm is a local search heuristic that iteratively improves a rout
 | Parallel 2-opt (Prototype) | ✅ Done      |
 | Top-k Batching           | ✅ Done        |
 | Top-k++ Thresholding     | ✅ Done        |
+| Multithread version 2-opt | ✅ Done        |
 | Results CSV Export       | ✅ Done        |
 | Hybrid Strategy (Next)   | 🧭 Planned     |
 
@@ -44,6 +45,12 @@ The 2-opt algorithm is a local search heuristic that iteratively improves a rout
 - Skips weak swaps to speed up evaluation
 - Adds tunable `k` and `delta_thresh` for better control
 
+### ✅ Multithread 2-opt
+- Instead of using a fixed initial route, we leverage multithreading and thread_rng to generate a different randomized initial tour for each thread.
+- Each thread independently applies the 2-opt algorithm to improve its own shuffled route.
+- To avoid the high overhead of full 2-opt sweeps, especially when using many threads, we adopt a random sampling strategy:
+- The best tour among all threads is selected as the global result
+- This method should be further optimized in order to get a competitive result compared to the sequential version
 ---
 
 ## 📊 Key Takeaways from Benchmark Results
