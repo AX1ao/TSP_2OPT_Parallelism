@@ -1,7 +1,6 @@
 mod tsp;
-mod two_opt_par;
-
 mod two_opt_par_ver2;
+
 mod par;
 mod par_prototype;
 mod par_topk;
@@ -9,7 +8,6 @@ mod par_topkplus;
 
 use tsp::*;
 #[allow(unused_imports)]
-use two_opt_par::*;
 use two_opt_par_ver2::*;
 use par::*;
 #[allow(unused_imports)]
