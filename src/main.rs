@@ -1,10 +1,10 @@
 mod tsp;
 mod two_opt_par;
-
+mod two_opt_par_ver2;
 use tsp::*;
 #[allow(unused_imports)]
 use two_opt_par::*;
-
+use two_opt_par_ver2::*;
 use std::env;
 
 fn main() {
@@ -79,5 +79,10 @@ fn main() {
     println!("Final tour cost: {:.2}", final_cost);
     println!("Time taken: {:.2?}", duration);
 
-    
+    let start = std::time::Instant::now();
+    let (_, min_cost) = two_opt_par_ver2(&tour, &cities);
+    let duration = start.elapsed();
+    println!("Parallel Version2:");
+    println!("Total cost: {:.2}", min_cost);
+    println!("Total duration: {:.2?}", duration);
 }
