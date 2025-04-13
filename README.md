@@ -22,6 +22,7 @@ The 2-opt algorithm is a local search heuristic that iteratively improves a rout
 | Top-k Batching           | ✅ Done        |
 | Top-k++ Thresholding     | ✅ Done        |
 | Multithread version 2-opt | ✅ Done        |
+| Optimized Version1 of Multi-2opt | ✅ Done        |
 | Results CSV Export       | ✅ Done        |
 | Hybrid Strategy (Next)   | 🧭 Planned     |
 
@@ -51,6 +52,13 @@ The 2-opt algorithm is a local search heuristic that iteratively improves a rout
 - To avoid the high overhead of full 2-opt sweeps, especially when using many threads, we adopt a random sampling strategy:
 - The best tour among all threads is selected as the global result
 - This method should be further optimized in order to get a competitive result compared to the sequential version
+
+### ✅ Optimized Version1 of Multi-2opt
+- This version try to reduce unnecessary total distance computations, instead of get the total distance after swap 2 edges, this version used a temporary vector to store all the edges that may gain potential improvement after applying swap operation
+- From the can_modify vector, the code performs a greedy multi-edge swap, selecting non-overlapping pairs of edges to apply swap operation in each round. This may help each route gain more improvement to decrease the total while loop.
+- Instead fixing a repeated_time variable to get the local minimum, we do this in a dynamic way with a while loop
+
+
 ---
 
 ## 📊 Key Takeaways from Benchmark Results
