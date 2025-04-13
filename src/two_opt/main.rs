@@ -1,6 +1,7 @@
 mod tsp;
 mod two_opt_par_ver2;
 mod optimized_multithread_2opt;
+mod optimized_ver2_multi2opt;
 mod par;
 mod par_prototype;
 mod par_topk;
@@ -18,6 +19,7 @@ use par_topk::*;
 use par_topkplus::*;
 
 use optimized_multithread_2opt::*;
+use optimized_ver2_multi2opt::*;
 use std::env;
 
 fn main() {
@@ -84,8 +86,8 @@ fn main() {
     println!("Final tour cost: {:.2}", final_cost);
     println!("Time taken: {:.2?}", duration);
 
-    Prototype Version
-    /* 
+    // Prototype Version
+    ///* 
     let start = std::time::Instant::now();
     let (_, final_cost) = par_prototype(&tour, &cities);
     let duration = start.elapsed();
@@ -122,6 +124,7 @@ fn main() {
         }
     }
 
+    // original version of multithread 2-opt
     let start = std::time::Instant::now();
     let (_, min_cost) = two_opt_par_ver2(&tour, &cities);
     let duration = start.elapsed();
@@ -129,11 +132,19 @@ fn main() {
     println!("Total cost: {:.2}", min_cost);
     println!("Total duration: {:.2?}", duration);
 
-
+    // optimized version 1 of multithread 2-opt
     let start = std::time::Instant::now();
     let (_, min_cost) = multi_2opt_optimized1(&tour, &cities);
     let duration = start.elapsed();
     println!("Optimized version 1 of multithread 2opt:");
+    println!("Total cost: {:.2}", min_cost);
+    println!("Total duration: {:.2?}", duration);
+
+    // optimized version 2 of multithread 2-opt, much better than the original version
+    let start = std::time::Instant::now();
+    let (_, min_cost) = multi_2opt_optimized2_V2(&tour, &cities);
+    let duration = start.elapsed();
+    println!("Optimized version 2 of multithread 2opt:");
     println!("Total cost: {:.2}", min_cost);
     println!("Total duration: {:.2?}", duration);
 }
