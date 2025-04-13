@@ -84,7 +84,7 @@ pub fn two_opt_par_ver2(tour: &[usize], cities: &[City]) -> (Vec<usize>, f64) {
         }
         (route, dis)
     })
-    .min_by(|a, b| a.0.partial_cmp(&b.0).unwrap())
+    .min_by(|a, b| a.1.partial_cmp(&b.1).unwrap())
     .unwrap();
     
     better_res
