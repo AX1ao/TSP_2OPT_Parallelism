@@ -1,6 +1,6 @@
 mod ga;
+use crate::ga::ga::run_ga;
 use rand::Rng;
-use ga::run_ga;
 
 #[derive(Clone, Debug)]
 pub struct City {
