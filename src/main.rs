@@ -1,7 +1,6 @@
 mod ga;
-
-use crate::ga::run_ga_config;
 use rand::Rng;
+use ga::run_ga;
 
 #[derive(Clone, Debug)]
 pub struct City {
@@ -33,21 +32,34 @@ fn euclidean_distance(a: &City, b: &City) -> f64 {
     (dx * dx + dy * dy).sqrt()
 }
 
-fn main() {
-    let cities = generate_random_cities(100); // adjust size as needed
+fn sample_cities() -> Vec<City> {
+    vec![
+        City { x: 0.0, y: 0.0 },
+        City { x: 1.0, y: 0.0 },
+        City { x: 1.0, y: 1.0 },
+        City { x: 0.0, y: 1.0 },
+        City { x: 0.5, y: 0.5 },
+    ]
+}
 
-    // ✅ Version 3: delayed 2-opt with final config
-    let best = run_ga_config(
-        &cities,     // cities
-        300,         // population size
-        1000,        // generations
-        0.10,        // base mutation rate
-        2,           // elitism_k
-        300,         // refine_start (delay 2-opt until gen 300)
-        100,         // refine_every (apply 2-opt every 100 gens)
-        10           // top_n individuals to refine
+fn main() {
+    //let cities = sample_cities();
+    let cities = generate_random_cities(100); // or 200, etc.
+
+    /*
+    Experiment with:
+    More generations (e.g., 1000)
+    Larger population sizes (e.g., 300)
+    Slightly higher mutation rate (e.g., 0.1)
+    Use elitism with top-2 or top-5 instead of just the best
+    */
+    let best = run_ga(
+        &cities,         // cities
+        300,             // population size
+        1000,             // generations
+        0.05             // mutation rate
     );
 
-    println!("Best distance: {:.4}", best.distance());
+    println!("Best distance: {}", best.distance());
     println!("Tour: {:?}", best.tour);
 }
