@@ -1,6 +1,6 @@
 mod ga;
 
-use crate::ga::run_ga_config;
+use crate::ga::run_ga_parallel;
 use rand::Rng;
 
 #[derive(Clone, Debug)]
@@ -37,7 +37,7 @@ fn main() {
     let cities = generate_random_cities(100); // adjust size as needed
 
     // ✅ Version 3: delayed 2-opt with final config
-    let best = run_ga_config(
+    let best = run_ga_parallel(
         &cities,     // cities
         300,         // population size
         1000,        // generations

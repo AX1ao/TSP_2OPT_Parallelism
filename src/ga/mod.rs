@@ -11,3 +11,4 @@ pub mod utils;
 
 pub use ga::run_ga;
 pub use ga::run_ga_config;
+pub use ga::run_ga_parallel;
