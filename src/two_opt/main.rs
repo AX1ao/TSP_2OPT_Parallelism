@@ -2,6 +2,7 @@ mod tsp;
 mod two_opt_par_ver2;
 mod optimized_multithread_2opt;
 mod optimized_ver2_multi2opt;
+mod random_indert_ver3_multi2opt;
 mod par;
 mod par_prototype;
 mod par_topk;
@@ -20,6 +21,7 @@ use par_topkplus::*;
 
 use optimized_multithread_2opt::*;
 use optimized_ver2_multi2opt::*;
+use random_indert_ver3_multi2opt::*;
 use std::env;
 
 fn main() {
@@ -145,6 +147,14 @@ fn main() {
     let (_, min_cost) = multi_2opt_optimized2_V2(&tour, &cities);
     let duration = start.elapsed();
     println!("Optimized version 2 of multithread 2opt:");
+    println!("Total cost: {:.2}", min_cost);
+    println!("Total duration: {:.2?}", duration);
+
+    // optimized version 3 of multithread 2-opt
+    let start = std::time::Instant::now();
+    let (_, min_cost) = multi_2opt_random_insert(&tour, &cities);
+    let duration = start.elapsed();
+    println!("Optimized version 3 of multithread 2opt:");
     println!("Total cost: {:.2}", min_cost);
     println!("Total duration: {:.2?}", duration);
 }
