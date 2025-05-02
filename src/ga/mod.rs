@@ -9,6 +9,5 @@ pub mod crossover;
 pub mod mutation;
 pub mod utils; 
 
-pub use ga::run_ga;
-pub use ga::run_ga_config;
-pub use ga::run_ga_parallel;
+pub use ga::{run_ga, run_ga_config, run_ga_parallel, run_ga_baseline};
+
