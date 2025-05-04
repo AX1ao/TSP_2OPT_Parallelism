@@ -1,6 +1,6 @@
 # 🧠 TSP 2-Opt Parallelism in Rust
 
-This project benchmarks and compares the performance of **sequential vs. parallel implementations** of the **2-opt algorithm** for solving the **Traveling Salesman Problem (TSP)** in Rust. It also explores hybrid strategies using Genetic Algorithms (GA) with local refinement.
+This project benchmarks and compares the performance of **sequential vs. parallel** implementations of the **2-opt algorithm** for solving the Traveling Salesman Problem (TSP) in Rust. It also explores **hybrid strategies** using Genetic Algorithms (GA) with local refinement.
 
 ---
 
@@ -9,7 +9,7 @@ This project benchmarks and compares the performance of **sequential vs. paralle
 - Implement a variety of sequential and parallel TSP solvers.
 - Evaluate trade-offs in speed vs. tour quality.
 - Test performance across different input sizes (`n = [50, 100, 200, 500, 1000]`).
-- Test performance across different # of cores (`[1, 2, 4, 8, 16, 32, 64*]`).
+- Test performance across different core counts (`[1, 2, 4, 8, 16, 32, 64*]`) using `taskset`.
 - Combine global (GA) and local (2-opt) heuristics for hybrid optimization.
 - Provide reproducible experiments with clean CLI and output logs.
 
@@ -18,16 +18,20 @@ This project benchmarks and compares the performance of **sequential vs. paralle
 ## ⚙️ Logistics & Procedures
 
 - All algorithms tested on random Euclidean graphs of size 50–1000.
-- Parallelism is achieved using Rayon with configurable thread count via `taskset`.
+- Parallelism is implemented using Rayon, with thread control via `taskset`.
 - Each version logs tour cost and timing.
-- Results recorded in `main.txt`, `scalability.txt`, and `parallelism_samples.txt`.
+- Results are saved in:
+  - `expected_outputs/main.txt`
+  - `expected_outputs/scalability.txt`
+  - `expected_outputs/parallelism_samples.txt`
 
-To run scalability benchmarks:
+### 🔧 Run scalability benchmarks:
+
 ```bash
 cargo run --release --bin main_scalability <version_name>
 ```
 
-To test parallel performance with fixed size (`n=1000`) and taskset CPU mask:
+### 🔧 Run all versions (n=1000) under specified CPU mask:
 ```bash
 taskset -c 0 cargo run --release --bin main_parallelism
 ```
@@ -55,8 +59,8 @@ Sequential 2-opt remains best for small sizes. For `n ≥ 1000`, hybrid and `mul
 
 ```
 TSP_2OPT_Parallelism/
-├── src/                # cleaned-up code for demo & reproductions
-│   ├── all_versions/                # All algorithm variants
+├── src/
+│   ├── all_versions/               # All algorithm variants
 │   │   ├── two_opt_seq.rs
 │   │   ├── par_prototype.rs
 │   │   ├── par_topk.rs
@@ -67,18 +71,17 @@ TSP_2OPT_Parallelism/
 │   │   ├── ga_baseline.rs
 │   │   ├── ga_config.rs
 │   │   ├── par_ga.rs
-│   │   ├── mod.rs
 │   │   └── utils.rs
-│   ├── main.rs                      # Main program for one-shot comparison
-│   ├── main_scalability.rs         # Benchmarks across input sizes
-│   └── main_parallelism.rs         # Test on n=1000 with taskset
-├── expected_outputs/
-│   ├── main.txt  # Full main logs
-│   ├── scalability.txt  # Full scalability logs
-│   └── parallelism_samples.txt  # Taskset-based runtime logs examples
+│   ├── main.rs                    # One-shot comparison of all
+│   ├── main_scalability.rs       # Varying input sizes
+│   └── main_parallelism.rs       # Fixed input (n=1000), taskset support
+├── expected_outputs/             # Saved logs for report
+│   ├── main.txt
+│   ├── scalability.txt
+│   └── parallelism_samples.txt
+├── raw_dev/                      # Working files, experiments, drafts
 ├── Cargo.toml
-├── raw_dev/                # All previous codes & result files while working on the projects
-└── README.md                 # YOU ARE HERE
+└── README.md                     # ← You are here!
 ```
 
 ---
