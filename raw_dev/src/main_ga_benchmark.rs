@@ -9,7 +9,7 @@ pub struct City {
     pub y: f64,
 }
 
-pub fn generate_seeded_cities(n: usize, seed: u64) -> Vec<City> {
+pub fn generate_cities(n: usize, seed: u64) -> Vec<City> {
     let mut rng = rand::rngs::StdRng::seed_from_u64(seed);
     (0..n)
         .map(|_| City {
@@ -78,7 +78,7 @@ fn main() {
     for &n in &sizes {
         for &seed in &seeds {
             println!("================ n = {}, seed = {} ================", n, seed);
-            let cities = generate_seeded_cities(n, seed);
+            let cities = generate_cities(n, seed);
 
             // --- Version 1: Delayed 2-Opt GA ---
             let start = Instant::now();

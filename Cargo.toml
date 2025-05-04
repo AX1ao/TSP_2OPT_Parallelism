@@ -8,10 +8,13 @@ rand = "0.8"
 rayon = "1.7"
 
 [[bin]]
-name = "ga"
-path = "src/main_ga.rs"
+name = "main"
+path = "src/main.rs"
 
 [[bin]]
-name = "two_opt"
-path = "src/main_two_opt.rs"
+name = "main_scalability"
+path = "src/main_scalability.rs"
 
+[[bin]]
+name = "main_parallelism"
+path = "src/main_parallelism.rs"

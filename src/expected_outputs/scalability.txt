@@ -1,0 +1,251 @@
+Running scalability test for version: `seq`
+
+Problem size: 50  
+✅ Final cost: 6398.68  
+⏱️ Time: 2.24ms
+
+Problem size: 100  
+✅ Final cost: 8483.33  
+⏱️ Time: 11.26ms
+
+Problem size: 200  
+✅ Final cost: 11705.57  
+⏱️ Time: 45.67ms
+
+Problem size: 500  
+✅ Final cost: 18725.17  
+⏱️ Time: 344.78ms
+
+Problem size: 1000  
+✅ Final cost: 26172.46  
+⏱️ Time: 1.61s
+
+
+Running scalability test for version: `prototype`
+
+Problem size: 50  
+✅ Final cost: 6054.07  
+⏱️ Time: 65.67ms
+
+Problem size: 100  
+✅ Final cost: 8265.76  
+⏱️ Time: 198.87ms
+
+Problem size: 200  
+✅ Final cost: 11581.89  
+⏱️ Time: 1.09s
+
+Problem size: 500  
+✅ Final cost: 18182.37  
+⏱️ Time: 9.92s
+
+Problem size: 1000  
+✅ Final cost: 29418.97  
+⏱️ Time: 52.70s
+
+
+Running scalability test for version: `topk`
+
+Problem size: 50  
+✅ Final cost: 6266.87  
+⏱️ Time: 47.90ms
+
+Problem size: 100  
+✅ Final cost: 11177.36  
+⏱️ Time: 1.96s
+
+Problem size: 200  
+✅ Final cost: 10954.09  
+⏱️ Time: 1.03s
+
+Problem size: 500  
+✅ Final cost: 18265.39  
+⏱️ Time: 10.52s
+
+Problem size: 1000  
+✅ Final cost: 25772.06  
+⏱️ Time: 93.88s
+
+
+Running scalability test for version: `topkplus`
+
+Problem size: 50  
+✅ Final cost: 12131.92  
+⏱️ Time: 34.95ms
+
+Problem size: 100  
+✅ Final cost: 8168.27  
+⏱️ Time: 186.01ms
+
+Problem size: 200  
+✅ Final cost: 11191.10  
+⏱️ Time: 976.91ms
+
+Problem size: 500  
+✅ Final cost: 18290.93  
+⏱️ Time: 10.17s
+
+Problem size: 1000  
+✅ Final cost: 80951.06  
+⏱️ Time: 51.69s
+
+
+Running scalability test for version: `mult1`
+
+Problem size: 50  
+✅ Final cost: 6261.56  
+⏱️ Time: 54.00ms
+
+Problem size: 100  
+✅ Final cost: 9539.35  
+⏱️ Time: 134.97ms
+
+Problem size: 200  
+✅ Final cost: 16161.76  
+⏱️ Time: 466.65ms
+
+Problem size: 500  
+✅ Final cost: 41308.48  
+⏱️ Time: 2.79s
+
+Problem size: 1000  
+✅ Final cost: 79713.86  
+⏱️ Time: 11.00s
+
+
+Running scalability test for version: `mult2`
+
+Problem size: 50  
+✅ Final cost: 13792.08  
+⏱️ Time: 29.79ms
+
+Problem size: 100  
+✅ Final cost: 35256.21  
+⏱️ Time: 65.09ms
+
+Problem size: 200  
+✅ Final cost: 84819.13  
+⏱️ Time: 256.42ms
+
+Problem size: 500  
+✅ Final cost: 236363.21  
+⏱️ Time: 1.52s
+
+Problem size: 1000  
+✅ Final cost: 493932.43  
+⏱️ Time: 7.12s
+
+
+Running scalability test for version: `mult3`
+
+Problem size: 50  
+✅ Final cost: 6437.19  
+⏱️ Time: 31.48ms
+
+Problem size: 100  
+✅ Final cost: 8677.71  
+⏱️ Time: 56.11ms
+
+Problem size: 200  
+✅ Final cost: 12374.60  
+⏱️ Time: 216.17ms
+
+Problem size: 500  
+✅ Final cost: 19782.86  
+⏱️ Time: 1.46s
+
+Problem size: 1000  
+✅ Final cost: 28757.16  
+⏱️ Time: 5.33s
+
+
+Running scalability test for version: `mult4`
+
+Problem size: 50  
+✅ Final cost: 6078.41  
+⏱️ Time: 28.91ms
+
+Problem size: 100  
+✅ Final cost: 7935.85  
+⏱️ Time: 70.40ms
+
+Problem size: 200  
+✅ Final cost: 11385.75  
+⏱️ Time: 206.98ms
+
+Problem size: 500  
+✅ Final cost: 18558.30  
+⏱️ Time: 1.30s
+
+Problem size: 1000  
+✅ Final cost: 26455.77  
+⏱️ Time: 5.37s
+
+
+Running scalability test for version: `ga1`
+
+Problem size: 50  
+✅ Final cost: 6078.21  
+⏱️ Time: 6.56s
+
+Problem size: 100  
+✅ Final cost: 8586.06  
+⏱️ Time: 11.82s
+
+Problem size: 200  
+✅ Final cost: 11326.92  
+⏱️ Time: 22.72s
+
+Problem size: 500  
+✅ Final cost: 18656.40  
+⏱️ Time: 65.49s
+
+Problem size: 1000  
+✅ Final cost: 26654.34  
+⏱️ Time: 127.53s
+
+
+Running scalability test for version: `ga2`
+
+Problem size: 50  
+✅ Final cost: 6499.03  
+⏱️ Time: 4.49s
+
+Problem size: 100  
+✅ Final cost: 8292.88  
+⏱️ Time: 8.46s
+
+Problem size: 200  
+✅ Final cost: 11431.92  
+⏱️ Time: 16.64s
+
+Problem size: 500  
+✅ Final cost: 18381.58  
+⏱️ Time: 49.21s
+
+Problem size: 1000  
+✅ Final cost: 26285.86  
+⏱️ Time: 152.99s
+
+
+Running scalability test for version: `ga3`
+
+Problem size: 50  
+✅ Final cost: 6418.71  
+⏱️ Time: 262.71ms
+
+Problem size: 100  
+✅ Final cost: 8300.06  
+⏱️ Time: 367.21ms
+
+Problem size: 200  
+✅ Final cost: 11633.84  
+⏱️ Time: 691.61ms
+
+Problem size: 500  
+✅ Final cost: 18890.70  
+⏱️ Time: 1.97s
+
+Problem size: 1000  
+✅ Final cost: 26100.37  
+⏱️ Time: 5.02s

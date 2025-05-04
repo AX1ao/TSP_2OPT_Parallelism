@@ -5,12 +5,12 @@ pub struct City {
     pub y:f64,
 }
 
-pub fn generate_cities(n: usize) -> Vec<City> {
-    let mut rng = thread_rng();
+pub fn generate_cities(n: usize, seed: u64) -> Vec<City> {
+    let mut rng = rand::rngs::StdRng::seed_from_u64(seed);
     (0..n)
         .map(|_| City {
             x: rng.gen_range(0.0..1000.0),
-            y: rng.gen_range(0.0..1000.0)
+            y: rng.gen_range(0.0..1000.0),
         })
         .collect()
 }
