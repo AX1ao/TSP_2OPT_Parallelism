@@ -21,6 +21,10 @@ The 2-opt algorithm is a local search heuristic that iteratively improves a rout
 | Parallel 2-opt (Prototype) | ✅ Done      |
 | Top-k Batching           | ✅ Done        |
 | Top-k++ Thresholding     | ✅ Done        |
+| Multithread version 2-opt | ✅ Done        |
+| Optimized Version1 of Multi-2opt | ✅ Done        |
+| Optimized Version2 of Multi-2opt | ✅ Done        |
+| Optimized Version3 of Multi-2opt | ✅ Done        |
 | Results CSV Export       | ✅ Done        |
 | Hybrid Strategy (Next)   | 🧭 Planned     |
 
@@ -43,6 +47,28 @@ The 2-opt algorithm is a local search heuristic that iteratively improves a rout
 - Further filters swaps by minimum delta (`Δ > 1e-6`, `1e-5`, etc.)
 - Skips weak swaps to speed up evaluation
 - Adds tunable `k` and `delta_thresh` for better control
+
+### ✅ Multithread 2-opt
+- Instead of using a fixed initial route, we leverage multithreading and thread_rng to generate a different randomized initial tour for each thread.
+- Each thread independently applies the 2-opt algorithm to improve its own shuffled route.
+- To avoid the high overhead of full 2-opt sweeps, especially when using many threads, we adopt a random sampling strategy:
+- The best tour among all threads is selected as the global result
+- This method should be further optimized in order to get a competitive result compared to the sequential version
+
+### ✅ Optimized Version1 of Multi-2opt
+- This version tries to reduce unnecessary total distance computations. Instead of getting the total distance after swapping 2 edges, this version uses a temporary vector to store all the edges that may gain potential improvement after applying the swap operation
+- From the can_modify vector, the code performs a greedy multi-edge swap, selecting non-overlapping pairs of edges to apply the swap operation in each round. This may help each route gain more improvement to decrease the total while loop.
+- Instead of fixing a repeated_time variable to get the local minimum, we dynamically do this with a while loop
+
+### ✅ Optimized Version2 of Multi-2opt
+- The key bottleneck of the previous optimization of multithread 2-opt is that we randomize the initial route which may cause applying the local optimization method to fall into a worse local solution as the number of cities increases
+- This version instead constructs several routes for half the threads to have the potential ability to jump out of the bad solution in case the shuffled routes are pretty bad
+- With the help of the build-in random function, half of the threads will call the get_initial_route with the randomized start city to avoid returning the same route so that half of the threads will do redundant things
+
+### ✅ Optimized Version3 of Multi-2opt
+- This version introduces a configurable random insertion strategy to improve the quality of initial routes.
+- Instead of relying entirely on random shuffling, each thread constructs an initial route by inserting cities one-by-one into the best possible position, starting from a randomly selected subset of cities
+- This version further proved that the reduce the ratio of randomized set can help get better result
 
 ---
 
