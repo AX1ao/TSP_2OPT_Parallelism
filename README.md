@@ -24,6 +24,7 @@ The 2-opt algorithm is a local search heuristic that iteratively improves a rout
 | Multithread version 2-opt | ✅ Done        |
 | Optimized Version1 of Multi-2opt | ✅ Done        |
 | Optimized Version2 of Multi-2opt | ✅ Done        |
+| Optimized Version3 of Multi-2opt | ✅ Done        |
 | Results CSV Export       | ✅ Done        |
 | Hybrid Strategy (Next)   | 🧭 Planned     |
 
@@ -64,6 +65,10 @@ The 2-opt algorithm is a local search heuristic that iteratively improves a rout
 - This version instead constructs several routes for half the threads to have the potential ability to jump out of the bad solution in case the shuffled routes are pretty bad
 - With the help of the build-in random function, half of the threads will call the get_initial_route with the randomized start city to avoid returning the same route so that half of the threads will do redundant things
 
+### ✅ Optimized Version3 of Multi-2opt
+- This version introduces a configurable random insertion strategy to improve the quality of initial routes.
+- Instead of relying entirely on random shuffling, each thread constructs an initial route by inserting cities one-by-one into the best possible position, starting from a randomly selected subset of cities
+- This version further proved that the reduce the ratio of randomized set can help get better result
 
 ---
 
