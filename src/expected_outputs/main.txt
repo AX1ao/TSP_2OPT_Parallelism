@@ -1,0 +1,22 @@
+✅ Initial tour: [5, 2, 9, 0, 4, 8, 1, 7, 3, 6], cost = 4165.56
+▶️  two_opt_seq: 2286.57
+▶️  par_prototype: 2286.57
+⚠️ Breaking out to avoid infinite loop!
+▶️  par_topk (k=2): 2941.48
+▶️  par_topkplus (k=2, δ=1e-6): 2919.30
+▶️  two_opt_par_ver2: 2286.57
+▶️  optimized_multithread_2opt: 2286.57
+▶️  optimized_ver2_multi2opt: 2286.57
+▶️  random_insert_ver3_multi2opt: 2345.65
+Generation 0: Best distance = 2804.4741 | Mutation rate = 0.1000
+Generation 50: Best distance = 2583.7301 | Mutation rate = 0.0500
+Generation 99: Best distance = 2583.7301 | Mutation rate = 0.0010
+▶️  ga_baseline: 2583.73
+Generation 0: Best distance = 3069.3564 | Mutation rate = 0.1000
+Generation 50: Best distance = 2286.5679 | Mutation rate = 0.0500
+Generation 99: Best distance = 2286.5679 | Mutation rate = 0.0010
+▶️  ga_config: 2286.57
+Generation 0: Best distance = 2939.2271 | Mutation rate = 0.1000
+Generation 50: Best distance = 2286.5679 | Mutation rate = 0.0500
+Generation 99: Best distance = 2286.5679 | Mutation rate = 0.0010
+▶️  par_ga: 2286.57

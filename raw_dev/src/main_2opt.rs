@@ -7,7 +7,10 @@ mod par;
 mod par_prototype;
 mod par_topk;
 mod par_topkplus;
+mod ga;
 
+use crate::ga::run_ga_parallel;
+use rand::Rng;
 use tsp::*;
 #[allow(unused_imports)]
 use two_opt_par_ver2::*;
@@ -65,13 +68,14 @@ fn main() {
     */
 
     // ======== CLI VERSION (optional later) ============
+    let seed = 121;
     let args: Vec<String> = env::args().collect();
     let num_cities = args.get(1)
         .and_then(|s| s.parse::<usize>().ok())
         .unwrap_or(50);
 
     println!("Generating {} cities...", num_cities);
-    let cities = generate_cities(num_cities);
+    let cities = generate_cities(num_cities,seed);
 
     let mut tour: Vec<usize> = (0..num_cities).collect();
     shuffle_tour(&mut tour);
@@ -157,4 +161,19 @@ fn main() {
     println!("Optimized version 3 of multithread 2opt:");
     println!("Total cost: {:.2}", min_cost);
     println!("Total duration: {:.2?}", duration);
+
+     // delayed 2-opt with best config
+     let best = run_ga_parallel(
+        &cities,     // cities
+        300,         // population size
+        1000,        // generations
+        0.10,        // base mutation rate
+        2,           // elitism_k
+        300,         // refine_start (delay 2-opt until gen 300)
+        100,         // refine_every (apply 2-opt every 100 gens)
+        10           // top_n individuals to refine
+    );
+
+    println!("Best distance: {:.4}", best.distance());
+    println!("Tour: {:?}", best.tour);
 }

@@ -1,123 +1,88 @@
 # 🧠 TSP 2-Opt Parallelism in Rust
 
-This project benchmarks and compares the performance of **sequential vs. parallel implementations** of the **2-opt algorithm** for solving the **Traveling Salesman Problem (TSP)** in Rust.
-
-The 2-opt algorithm is a local search heuristic that iteratively improves a route by reversing segments to reduce total travel distance. This project:
-- Implements a baseline sequential version in Rust
-- Explores multiple parallelization strategies using Rayon
-- Benchmarks tour cost and optimization time across various designs
-- Organizes results for reproducibility and analysis
+This project benchmarks and compares the performance of **sequential vs. parallel** implementations of the **2-opt algorithm** for solving the Traveling Salesman Problem (TSP) in Rust. It also explores **hybrid strategies** using Genetic Algorithms (GA) with local refinement.
 
 ---
 
-## 🎯 Objectives / Current Project Status
+## 🎯 Project Objectives
 
-| Component                 | Status        |
-|--------------------------|---------------|
-| City & Distance Modeling | ✅ Done        |
-| Random City Generator    | ✅ Done        |
-| Sequential 2-opt         | ✅ Done        |
-| Benchmarking & Timing    | ✅ Done        |
-| Parallel 2-opt (Prototype) | ✅ Done      |
-| Top-k Batching           | ✅ Done        |
-| Top-k++ Thresholding     | ✅ Done        |
-| Multithread version 2-opt | ✅ Done        |
-| Optimized Version1 of Multi-2opt | ✅ Done        |
-| Optimized Version2 of Multi-2opt | ✅ Done        |
-| Optimized Version3 of Multi-2opt | ✅ Done        |
-| Results CSV Export       | ✅ Done        |
-| Hybrid Strategy (Next)   | 🧭 Planned     |
+- Implement a variety of sequential and parallel TSP solvers.
+- Evaluate trade-offs in speed vs. tour quality.
+- Test performance across different input sizes (`n = [50, 100, 200, 500, 1000]`).
+- Test performance across different core counts (`[1, 2, 4, 8, 16, 32, 64*]`) using `taskset`.
+- Combine global (GA) and local (2-opt) heuristics for hybrid optimization.
+- Provide reproducible experiments with clean CLI and output logs.
 
 ---
 
-## 🧠 Parallel Strategies Implemented
+## ⚙️ Logistics & Procedures
 
-### ✅ Prototype (Naive Parallel 2-Opt)
-- Parallel evaluation of all (i, j) swap candidates using `par_iter()`
-- Applies the single best swap per iteration
-- Repeats until no improving swaps remain (`delta > 1e-6`)
-- Includes an iteration safety limit
+- All algorithms tested on random Euclidean graphs of size 50–1000.
+- Parallelism is implemented using Rayon, with thread control via `taskset`.
+- Each version logs tour cost and timing.
+- Results are saved in:
+  - `expected_outputs/main.txt`
+  - `expected_outputs/scalability.txt`
+  - `expected_outputs/parallelism_samples.txt`
 
-### ✅ Top-K Batching
-- Evaluates all improving swaps, selects top-k by delta
-- Applies **non-overlapping** swaps from the top-k set
-- Reduces iteration count and improves convergence speed
-
-### ✅ Top-K++ (With Delta Threshold)
-- Further filters swaps by minimum delta (`Δ > 1e-6`, `1e-5`, etc.)
-- Skips weak swaps to speed up evaluation
-- Adds tunable `k` and `delta_thresh` for better control
-
-### ✅ Multithread 2-opt
-- Instead of using a fixed initial route, we leverage multithreading and thread_rng to generate a different randomized initial tour for each thread.
-- Each thread independently applies the 2-opt algorithm to improve its own shuffled route.
-- To avoid the high overhead of full 2-opt sweeps, especially when using many threads, we adopt a random sampling strategy:
-- The best tour among all threads is selected as the global result
-- This method should be further optimized in order to get a competitive result compared to the sequential version
-
-### ✅ Optimized Version1 of Multi-2opt
-- This version tries to reduce unnecessary total distance computations. Instead of getting the total distance after swapping 2 edges, this version uses a temporary vector to store all the edges that may gain potential improvement after applying the swap operation
-- From the can_modify vector, the code performs a greedy multi-edge swap, selecting non-overlapping pairs of edges to apply the swap operation in each round. This may help each route gain more improvement to decrease the total while loop.
-- Instead of fixing a repeated_time variable to get the local minimum, we dynamically do this with a while loop
-
-### ✅ Optimized Version2 of Multi-2opt
-- The key bottleneck of the previous optimization of multithread 2-opt is that we randomize the initial route which may cause applying the local optimization method to fall into a worse local solution as the number of cities increases
-- This version instead constructs several routes for half the threads to have the potential ability to jump out of the bad solution in case the shuffled routes are pretty bad
-- With the help of the build-in random function, half of the threads will call the get_initial_route with the randomized start city to avoid returning the same route so that half of the threads will do redundant things
-
-### ✅ Optimized Version3 of Multi-2opt
-- This version introduces a configurable random insertion strategy to improve the quality of initial routes.
-- Instead of relying entirely on random shuffling, each thread constructs an initial route by inserting cities one-by-one into the best possible position, starting from a randomly selected subset of cities
-- This version further proved that the reduce the ratio of randomized set can help get better result
-
----
-
-## 📊 Key Takeaways from Benchmark Results
-
-### ✅ Sequential vs Parallel
-- Sequential 2-Opt is **extremely fast** for `n < 500`
-- Parallelism only starts to pay off beyond `n ≥ 1000`
-- Parallel versions may find **slightly better routes**, but are **much slower**
-
-### ✅ Top-K Batching
-- Small `k` (2–3) often gives the best trade-off between cost and runtime
-- Larger `k` can increase instability and runtime
-- Good middle-ground for enhancing parallel 2-opt
-
-### ✅ Top-K++ Optimization
-- Threshold filtering (`Δ > 1e-6`) was mostly neutral in impact — weak swaps are rare anyway
-- Best cost-performance balance often seen at `k = 3 or 10`
-- Runtime for `n = 1000` ranged from **4s to 13s**, depending on `k`
-- Sequential still dominates small instances, but TopK++ excels at **quality** in large `n`
-
-### ⚠️ Trade-offs
-- Every parallel version incurs **O(n²)** candidate generation and filtering
-- Gains in cost often come at the expense of **longer runtimes**
-- Combining 2-Opt with a **global search** strategy may yield better scalability
-
----
-
-## 🧪 Example CLI Usage
+### 🔧 Run scalability benchmarks:
 
 ```bash
-# Run with default (50 cities)
-cargo run --release
-
-# Run with 100 cities
-cargo run --release -- 100
+cargo run --release --bin main_scalability <version_name>
 ```
 
-The program outputs:
-- Initial tour cost
-- Final optimized tour cost
-- Time taken for each strategy (sequential, parallel, etc.)
+### 🔧 Run all versions (n=1000) under specified CPU mask:
+```bash
+taskset -c 0 cargo run --release --bin main_parallelism
+```
 
 ---
 
-## 📂 Results
-All experiment results are now stored in CSV format in the `results/` folder.
-- Includes time (ms), cost, k, and threshold parameters
-- Easy to import into Excel, Python (pandas), etc.
+## 📊 Results & Conclusions (Summary)
+
+| Version     | Type         | Cost (n=1000) | Time        | Note                         |
+|-------------|--------------|---------------|-------------|------------------------------|
+| `seq`       | Sequential   | ~26k          | ~112 ms     | Very fast                    |
+| `topkplus`  | Parallel     | ~25–26k       | 3–7 sec     | Good quality, moderate speed |
+| `mult1`     | Parallel     | ~79k          | 1.2–20 sec  | Often worse quality          |
+| `mult2`     | Parallel     | ~498k         | <1 sec      | Fast but bad                 |
+| `mult3`     | Parallel     | ~28k          | ~300 ms–3s  | Balanced                     |
+| `mult4`     | Parallel     | ~26k          | ~380 ms–4s  | Best cost-quality balance    |
+| `ga3`       | Hybrid (GA)  | ~26k          | ~3–48 sec   | Strong global+local          |
+
+🧠 **Conclusion:**  
+Sequential 2-opt remains best for small sizes. For `n ≥ 1000`, hybrid and `mult4` yield the best results. `mult2` is fastest but lowest quality.
+
+---
+
+## 📁 Folder Structure
+
+```
+TSP_2OPT_Parallelism/
+├── src/
+│   ├── all_versions/               # All algorithm variants
+│   │   ├── two_opt_seq.rs
+│   │   ├── par_prototype.rs
+│   │   ├── par_topk.rs
+│   │   ├── par_topkplus.rs
+│   │   ├── optimized_multithread_2opt.rs
+│   │   ├── optimized_ver2_multi2opt.rs
+│   │   ├── random_insert_ver3_multi2opt.rs
+│   │   ├── ga_baseline.rs
+│   │   ├── ga_config.rs
+│   │   ├── par_ga.rs
+│   │   └── utils.rs
+│   ├── main.rs                    # One-shot comparison of all
+│   ├── main_scalability.rs       # Varying input sizes
+│   └── main_parallelism.rs       # Fixed input (n=1000), taskset support
+├── expected_outputs/             # Saved logs for report
+│   ├── main.txt
+│   ├── scalability.txt
+│   └── parallelism_samples.txt
+├── raw_dev/                      # Working files, experiments, drafts
+├── Cargo.toml
+└── README.md                     # ← You are here!
+```
 
 ---
 

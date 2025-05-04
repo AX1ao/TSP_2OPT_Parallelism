@@ -1,0 +1,81 @@
+=======================================================
+> taskset -c 0 cargo run --release --bin main_parallelism
+=======================================================
+▶️  Running version `seq`
+✅ Final cost: 26948.95
+⏱️  Time: 112.22ms
+
+▶️  Running version `topkplus`
+✅ Final cost: 26230.83
+⏱️  Time: 7.96s
+
+▶️  Running version `mult1`
+✅ Final cost: 79878.36
+⏱️  Time: 20.81s
+
+▶️  Running version `mult2`
+✅ Final cost: 498686.50
+⏱️  Time: 4.76s
+
+▶️  Running version `mult3`
+✅ Final cost: 28779.98
+⏱️  Time: 3.06s
+
+▶️  Running version `mult4`
+✅ Final cost: 26296.77
+⏱️  Time: 3.81s
+
+▶️  Running version `ga3`
+Generation 0: Best distance = 497153.7232 | Mutation rate = 0.1000
+Generation 50: Best distance = 399311.9144 | Mutation rate = 0.0950
+Generation 100: Best distance = 354091.2135 | Mutation rate = 0.0900
+Generation 150: Best distance = 325535.1210 | Mutation rate = 0.0850
+Generation 200: Best distance = 304404.5438 | Mutation rate = 0.0800
+Generation 250: Best distance = 288208.3886 | Mutation rate = 0.0750
+Generation 300: Best distance = 26002.3686 | Mutation rate = 0.0700
+Generation 350: Best distance = 26002.3686 | Mutation rate = 0.0650
+Generation 400: Best distance = 26002.3686 | Mutation rate = 0.0600
+Early stopping at generation 400 (no improvement in 100 generations)
+✅ Final cost: 26002.37
+⏱️  Time: 48.96s
+
+=======================================================
+>  taskset -c 0-31 cargo run --release --bin main_parallelism
+=======================================================
+▶️  Running version `seq`
+✅ Final cost: 26556.39
+⏱️  Time: 112.33ms
+
+▶️  Running version `topkplus`
+✅ Final cost: 25746.35
+⏱️  Time: 3.18s
+
+▶️  Running version `mult1`
+✅ Final cost: 79607.09
+⏱️  Time: 1.24s
+
+▶️  Running version `mult2`
+✅ Final cost: 497950.99
+⏱️  Time: 422.50ms
+
+▶️  Running version `mult3`
+✅ Final cost: 28663.10
+⏱️  Time: 293.35ms
+
+▶️  Running version `mult4`
+✅ Final cost: 26492.42
+⏱️  Time: 384.93ms
+
+▶️  Running version `ga3`
+Generation 0: Best distance = 498718.4656 | Mutation rate = 0.1000
+Generation 50: Best distance = 411801.0174 | Mutation rate = 0.0950
+Generation 100: Best distance = 363461.9884 | Mutation rate = 0.0900
+Generation 150: Best distance = 335757.3989 | Mutation rate = 0.0850
+Generation 200: Best distance = 316719.5901 | Mutation rate = 0.0800
+Generation 250: Best distance = 301290.8775 | Mutation rate = 0.0750
+Generation 300: Best distance = 26246.0409 | Mutation rate = 0.0700
+Generation 350: Best distance = 26246.0409 | Mutation rate = 0.0650
+Generation 400: Best distance = 26246.0409 | Mutation rate = 0.0600
+Early stopping at generation 400 (no improvement in 100 generations)
+✅ Final cost: 26246.04
+⏱️  Time: 3.12s
