@@ -56,7 +56,7 @@ Sequential 2-opt remains best for small sizes. For `n ≥ 1000`, hybrid and `mul
 ---
 
 ## 📁 Folder Structure
-
+For clarity and ease of viewing, we reorganized the code into a clean demo version. All original development code and raw results are preserved in the raw_dev folder.
 ```
 TSP_2OPT_Parallelism/
 ├── src/
