@@ -1,3 +1,7 @@
+// utils.rs
+// 🧰 Utility functions used by the GA (e.g., 2-opt local refinement).
+// (Assumed to exist from context, though contents were not shown.)
+
 use crate::City;
 
 pub fn two_opt(tour: &[usize], cities: &[City]) -> Vec<usize> {

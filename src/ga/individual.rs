@@ -1,3 +1,7 @@
+// individual.rs
+// 🧬 Defines the Individual struct used in the GA population.
+// Calculates fitness based on inverse tour distance.
+
 use crate::{City, compute_total_distance};
 
 #[derive(Clone)]

@@ -1,0 +1,26 @@
+n,Seed,Method,Distance,Time
+50,42,Baseline GA,674.29,26.94
+50,42,Configurable GA,670.27,19.45
+50,42,Delayed 2-Opt GA,649.82,20.19
+50,42,Parallel GA,684.44,1.07
+50,123,Baseline GA,655.42,24.56
+50,123,Configurable GA,641.10,18.69
+50,123,Delayed 2-Opt GA,657.25,22.90
+50,123,Parallel GA,611.83,1.03
+100,42,Baseline GA,912.48,118.58
+100,42,Configurable GA,920.57,51.03
+100,42,Delayed 2-Opt GA,914.26,97.95
+100,42,Parallel GA,896.74,1.57
+100,123,Baseline GA,878.48,87.88
+100,123,Configurable GA,871.04,53.03
+100,123,Delayed 2-Opt GA,912.25,99.50
+100,123,Parallel GA,905.33,1.58
+200,42,Baseline GA,1190.90,211.48
+200,42,Configurable GA,1194.67,97.59
+200,42,Delayed 2-Opt GA,1197.23,240.98
+200,42,Parallel GA,1169.29,2.98
+200,123,Baseline GA,1175.82,174.21
+200,123,Configurable GA,1149.08,97.74
+200,123,Delayed 2-Opt GA,1177.30,228.62
+200,123,Parallel GA,1162.66,2.65
+

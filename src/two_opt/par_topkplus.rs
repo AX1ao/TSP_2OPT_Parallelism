@@ -7,7 +7,7 @@ Update Menu:
 */
 use rayon::prelude::*;
 use std::cmp::Ordering;
-use crate::tsp::{City, compute_total_distance, euclidean_distance};
+use crate::two_opt::tsp::{City, compute_total_distance, euclidean_distance};
 
 /// Top-k Smart Parallel 2-Opt with Early Cutoff and Deferred Application
 pub fn par_topkplus(tour: &[usize], cities: &[City], k: usize, delta_thresh: f64) -> (Vec<usize>, f64) {

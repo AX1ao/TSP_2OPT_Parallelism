@@ -1,3 +1,6 @@
+// selection.rs
+// 🎯 Implements tournament selection for choosing parents in GA.
+
 use crate::ga::individual::Individual;
 use rand::thread_rng;
 use rand::Rng;

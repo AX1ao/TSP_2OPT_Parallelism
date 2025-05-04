@@ -1,3 +1,7 @@
+// crossover.rs
+// 🔄 Contains crossover logic used in the Genetic Algorithm.
+// Currently implements Order Crossover (OX) to combine two parent tours.
+
 use rand::Rng;
 use std::collections::HashSet;
 
